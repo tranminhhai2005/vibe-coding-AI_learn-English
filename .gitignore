@@ -1,0 +1,19 @@
+node_modules/
+dist/
+output/
+.idea/
+.vscode/
+*.log
+.env
+.DS_Store
+
+# Flutter / Dart ignores
+**/.dart_tool/
+**/.packages
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/build/
+**/ios/Pods/
+**/ios/.symlinks/
+**/android/.gradle/
+**/android/app/build/
