@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Splash screen background với gradient tối -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Background gradient tối -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="135"
+                android:startColor="#0f172a"
+                android:centerColor="#1e1b4b"
+                android:endColor="#0c1a30" />
+        </shape>
+    </item>
+
+    <!-- Logo "E" ở giữa (bitmap từ mipmap) -->
+    <item
+        android:gravity="center"
+        android:width="120dp"
+        android:height="120dp">
+        <bitmap
+            android:src="@mipmap/ic_launcher"
+            android:gravity="center"
+            android:tileMode="disabled" />
+    </item>
+
+</layer-list>
