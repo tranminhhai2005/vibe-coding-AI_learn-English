@@ -1,0 +1,48 @@
+workflows:
+  ios-testflight:
+    name: Learn English iOS (TestFlight)
+    max_build_duration: 120
+    instance_type: mac_mini_m2
+    cache:
+      cache_paths:
+        - $HOME/.pub-cache
+    environment:
+      flutter: stable
+      xcode: latest
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: ${APP_BUNDLE_ID}
+    integrations:
+      app_store_connect: LearnEnglishASC
+    scripts:
+      - name: Create missing iOS project files
+        script: |
+          : "${APP_BUNDLE_ID:?Set APP_BUNDLE_ID in Codemagic to your registered Apple bundle identifier}"
+          if [ ! -d "ios/Runner.xcodeproj" ]; then
+            flutter create --platforms=ios --org com.learnenglish --no-pub .
+          fi
+      - name: Install Flutter packages
+        script: flutter pub get
+      - name: Analyze and test
+        script: |
+          flutter analyze
+          flutter test
+      - name: Install CocoaPods
+        script: |
+          cd ios
+          pod install
+      - name: Apply iOS app settings
+        script: |
+          ruby scripts/configure_ios_project.rb
+          /usr/libexec/PlistBuddy -c 'Set :CFBundleDisplayName "Learn English"' ios/Runner/Info.plist
+      - name: Set up iOS code signing
+        script: xcode-project use-profiles
+      - name: Build signed IPA
+        script: flutter build ipa --release --build-number "$BUILD_NUMBER"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - build/ios/archive/*.xcarchive
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
