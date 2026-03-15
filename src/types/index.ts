@@ -1,3 +1,4 @@
+// Part of speech types for vocabulary classification
 export type PartOfSpeech =
   | 'noun'
   | 'verb'
@@ -5,8 +6,14 @@ export type PartOfSpeech =
   | 'adverb'
   | 'preposition'
   | 'conjunction'
+  | 'pronoun'
+  | 'interjection'
   | 'phrase'
+  | 'idiom'
   | 'other';
+
+// CEFR vocabulary proficiency levels (A1 → C2)
+export type CEFRLevel = 'A1' | 'A2' | 'B1' | 'B2' | 'C1' | 'C2';
 
 export type MemoryLevel = 'new' | 'learning' | 'mastered';
 
@@ -16,6 +23,9 @@ export interface Word {
   meaning: string;
   ipa?: string;
   partOfSpeech: PartOfSpeech;
+  cefrLevel?: CEFRLevel;         // CEFR level classification (A1–C2)
+  synonyms?: string[];           // List of synonyms
+  antonyms?: string[];           // List of antonyms
   example?: string;
   exampleMeaning?: string;
   image?: string;
@@ -95,9 +105,12 @@ export interface ExtractedOCRWord {
 
 export interface AppSettings {
   theme: 'light' | 'dark' | 'system';
-  speechRate: number; // 0.75 - 1.25
+  speechRate: number;    // 0.75 - 1.25
   speechPitch: number;
   speechVoiceURI: string;
   autoPlayAudio: boolean;
-  dailyGoal: number; // target words per day
+  dailyGoal: number;     // target words per day
+  enableCEFRFilter: boolean;      // show CEFR level badges
+  showSynonyms: boolean;          // show synonyms in word detail
+  quizDifficulty: 'easy' | 'normal' | 'hard'; // quiz difficulty mode
 }
