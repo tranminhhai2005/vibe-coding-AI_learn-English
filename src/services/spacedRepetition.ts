@@ -1,10 +1,23 @@
 import { MemoryLevel, Word } from '../types';
 
+/**
+ * Leitner System - Spaced Repetition Algorithm
+ *
+ * Box 1: Review every 1 day  (new / unknown)
+ * Box 2: Review every 3 days
+ * Box 3: Review every 7 days
+ * Box 4: Review every 14 days
+ * Box 5: Review every 30 days (fully mastered)
+ *
+ * On correct answer → move up one box (max 5)
+ * On incorrect answer → move back to box 1
+ */
+
 // Interval days per Leitner box
 export const LEITNER_INTERVALS: Record<number, number> = {
-  1: 1, // 1 day
-  2: 3, // 3 days
-  3: 7, // 7 days
+  1: 1,  // 1 day
+  2: 3,  // 3 days
+  3: 7,  // 7 days
   4: 14, // 14 days
   5: 30, // 30 days
 };
@@ -65,4 +78,29 @@ export function isDueForReview(word: Word): boolean {
 
 export function isWeakWord(word: Word): boolean {
   return word.incorrectCount > 0 || (word.leitnerBox <= 2 && word.memoryLevel !== 'mastered');
+}
+
+/**
+ * Returns the percentage progress toward mastery for a word (0–100).
+ * Based on Leitner box position and correct answer ratio.
+ */
+export function masteryProgress(word: Word): number {
+  const boxProgress = ((word.leitnerBox - 1) / 4) * 70; // box contributes 70%
+  const total = (word.correctCount || 0) + (word.incorrectCount || 0);
+  const accuracy = total > 0 ? (word.correctCount / total) * 30 : 0; // accuracy contributes 30%
+  return Math.min(100, Math.round(boxProgress + accuracy));
+}
+
+/**
+ * Returns a human-readable label for a word's current Leitner box.
+ */
+export function leitnerBoxLabel(box: number): string {
+  const labels: Record<number, string> = {
+    1: 'Mới học',
+    2: 'Đang nhớ',
+    3: 'Khá thuộc',
+    4: 'Gần thuộc',
+    5: 'Đã thuộc',
+  };
+  return labels[box] || 'Chưa xác định';
 }
