@@ -1,5 +1,13 @@
 /**
- * Utility functions for text normalization, comparison, and Levenshtein distance
+ * Utility functions for text normalization, comparison, and Levenshtein distance.
+ *
+ * Usage:
+ *  - cleanString()              → normalize input before comparing
+ *  - normalizeVietnamese()      → normalize with NFC Unicode form (preserves diacritics)
+ *  - extractMeanings()          → split "nghĩa 1, nghĩa 2; nghĩa 3" into array
+ *  - isVietnameseMeaningMatch() → fuzzy match user's Vietnamese answer
+ *  - isEnglishWordMatch()       → exact + Levenshtein match for English words
+ *  - levenshteinDistance()      → edit distance between two strings
  */
 
 // Normalize string: lowercase, trim, collapse consecutive whitespaces, remove outer punctuation
